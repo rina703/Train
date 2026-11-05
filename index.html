@@ -130,11 +130,67 @@ body {
 /* QUESTION */
 
 .q {
-  margin-top:26px;
+  display:none;
+  margin-top:18px;
   border:2.5px solid var(--ink);
   border-radius:22px;
   overflow:hidden;
   background:#fff;
+}
+
+/* 현재 질문만 표시 */
+
+.q.active {
+  display:block;
+  animation:slideIn .35s cubic-bezier(.2,.8,.3,1);
+}
+
+.q.active.back {
+  animation:slideBack .35s cubic-bezier(.2,.8,.3,1);
+}
+
+@keyframes slideIn {
+  from { opacity:0; transform:translateX(28px); }
+  to   { opacity:1; transform:none; }
+}
+
+@keyframes slideBack {
+  from { opacity:0; transform:translateX(-28px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* 질문 진행 바 */
+
+.qprog {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:20px;
+}
+
+.qprog i {
+  flex:1;
+  height:12px;
+  border-radius:99px;
+  border:2px solid var(--ink);
+  background:#f1ece0;
+  transition:background .25s;
+}
+
+.qprog i:nth-child(1) { --c:var(--orange); }
+.qprog i:nth-child(2) { --c:var(--lav); }
+.qprog i:nth-child(3) { --c:var(--sky); }
+.qprog i:nth-child(4) { --c:var(--butter); }
+
+.qprog i.on {
+  background:var(--c);
+}
+
+.qprog b {
+  flex:0 0 auto;
+  margin-left:6px;
+  font-size:.85rem;
+  font-weight:800;
 }
 
 .q-head {
@@ -206,17 +262,120 @@ body {
   background:var(--butter);
 }
 
-/* Q1 TEXT INPUT */
+/* Q1 CHOICES */
+
+.choices {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.choice input {
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.choice label {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 16px;
+  border:2.5px solid var(--ink);
+  border-radius:16px;
+  background:#fff;
+  font-weight:700;
+  font-size:1.05rem;
+  cursor:pointer;
+  position:relative;
+  transition:transform .12s,box-shadow .12s,background .12s;
+}
+
+.q1 { --acc:var(--orange); }
+.q3 { --acc:var(--sky); }
+
+.choice label em {
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:var(--acc);
+  color:var(--ink);
+  font-style:normal;
+  font-weight:900;
+  font-size:.95rem;
+  border:2px solid var(--ink);
+}
+
+.choice label:hover {
+  background:#fbf8f0;
+}
+
+.choice label span {
+  word-break:keep-all;
+  line-height:1.4;
+}
+
+.choice label small {
+  font-size:.9rem;
+  font-weight:500;
+  opacity:.8;
+}
+
+.hint {
+  font-size:.85rem;
+  font-weight:600;
+  color:#7a7466;
+  margin-bottom:12px;
+}
+
+.q3 .place-input {
+  background:#f2fafd;
+}
+
+.choice input:checked+label {
+  background:var(--acc);
+  box-shadow:4px 4px 0 var(--ink);
+  transform:translate(-2px,-2px);
+}
+
+.choice input:checked+label em {
+  background:var(--ink);
+  color:#fff;
+}
+
+.choice input:checked+label::after {
+  content:"✓";
+  margin-left:auto;
+  font-weight:900;
+  font-size:1.1rem;
+}
+
+.choice input:focus-visible+label {
+  outline:3px solid var(--blue);
+  outline-offset:2px;
+}
+
+.etc-wrap {
+  margin-top:14px;
+  animation:slideIn .3s cubic-bezier(.2,.8,.3,1);
+}
+
+.etc-wrap[hidden] {
+  display:none;
+}
 
 .place-input {
   width:100%;
-  min-height:100px;
+  min-height:90px;
   resize:vertical;
   font:inherit;
   padding:14px 16px;
   border:2.5px solid var(--ink);
   border-radius:14px;
-  background:#f2fafd;
+  background:#fff6ee;
 }
 
 /* Q2 IMAGE TILES */
@@ -318,7 +477,7 @@ textarea {
 
 .moods {
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:8px;
 }
 
@@ -377,6 +536,53 @@ textarea {
 }
 
 .submit:focus-visible {
+  outline:3px solid var(--blue);
+  outline-offset:3px;
+}
+
+/* 이전 / 다음 버튼 */
+
+.nav {
+  display:flex;
+  gap:12px;
+  margin-top:26px;
+}
+
+.nav .submit {
+  flex:1;
+  width:auto;
+  margin-top:0;
+}
+
+.nav .prev {
+  flex:0 0 30%;
+  border:2.5px solid var(--ink);
+  background:#fff;
+  color:var(--ink);
+  font:inherit;
+  font-weight:800;
+  font-size:1.05rem;
+  border-radius:18px;
+  cursor:pointer;
+  box-shadow:5px 5px 0 var(--ink);
+  transition:transform .12s,box-shadow .12s;
+}
+
+.nav .prev[hidden] {
+  display:none;
+}
+
+.nav .prev:hover {
+  transform:translate(-2px,-2px);
+  box-shadow:7px 7px 0 var(--ink);
+}
+
+.nav .prev:active {
+  transform:translate(3px,3px);
+  box-shadow:2px 2px 0 var(--ink);
+}
+
+.nav .prev:focus-visible {
   outline:3px solid var(--blue);
   outline-offset:3px;
 }
@@ -568,7 +774,14 @@ textarea {
 
   <form id="survey" novalidate>
 
-    <!-- Q1 방문한 장소 : 서술형 -->
+    <!-- 질문 진행 바 -->
+
+    <div class="qprog" id="qprog" aria-hidden="true">
+      <i></i><i></i><i></i><i></i>
+      <b id="qcount">1 / 4</b>
+    </div>
+
+    <!-- Q1 방문한 장소 : 객관식 + 기타(직접 입력) -->
 
     <section class="q q1" data-q="1">
       <div class="q-head">
@@ -580,18 +793,56 @@ textarea {
       </div>
 
       <div class="q-body">
-        <textarea
-          id="place"
-          name="place"
-          class="place-input"
-          maxlength="200"
-          placeholder="방문한 장소를 자유롭게 입력해 주세요."
+        <p class="hint">여러 개 선택할 수 있어요.</p>
+        <div
+          class="choices"
+          role="group"
           aria-label="방문한 장소"
-        ></textarea>
+        >
+
+          <div class="choice">
+            <input type="checkbox" name="place" id="p1" value="종로">
+            <label for="p1"><em>1</em><span>종로</span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="place" id="p2" value="성수">
+            <label for="p2"><em>2</em><span>성수</span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="place" id="p3" value="경복궁">
+            <label for="p3"><em>3</em><span>경복궁</span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="place" id="p4" value="이태원">
+            <label for="p4"><em>4</em><span>이태원</span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="place" id="p5" value="기타">
+            <label for="p5"><em>5</em><span>기타</span></label>
+          </div>
+
+        </div>
+
+        <!-- 5번 기타 선택 시에만 표시 -->
+
+        <div class="etc-wrap" id="etcWrap1" hidden>
+          <textarea
+            id="placeEtc"
+            name="placeEtc"
+            class="place-input"
+            maxlength="100"
+            placeholder="방문한 다른 장소를 직접 입력해 주세요."
+            aria-label="기타 방문 장소"
+          ></textarea>
+        </div>
       </div>
 
-      <p class="msg">
-        방문한 장소를 입력해 주세요.
+      <p class="msg" id="msg1">
+        방문한 장소를 하나 이상 선택해 주세요.
       </p>
     </section>
 
@@ -607,15 +858,16 @@ textarea {
       </div>
 
       <div class="q-body">
+        <p class="hint">여러 개 선택할 수 있어요.</p>
         <div
           class="tiles"
-          role="radiogroup"
+          role="group"
           aria-label="이용한 지하철 노선"
         >
 
           <div class="tile">
             <input
-              type="radio"
+              type="checkbox"
               name="line"
               id="l1"
               value="1호선"
@@ -628,7 +880,7 @@ textarea {
 
           <div class="tile">
             <input
-              type="radio"
+              type="checkbox"
               name="line"
               id="l2"
               value="2호선"
@@ -641,7 +893,7 @@ textarea {
 
           <div class="tile">
             <input
-              type="radio"
+              type="checkbox"
               name="line"
               id="l3"
               value="3호선"
@@ -654,7 +906,7 @@ textarea {
 
           <div class="tile">
             <input
-              type="radio"
+              type="checkbox"
               name="line"
               id="l4"
               value="4호선"
@@ -667,7 +919,7 @@ textarea {
 
           <div class="tile">
             <input
-              type="radio"
+              type="checkbox"
               name="line"
               id="l5"
               value="5호선"
@@ -680,7 +932,7 @@ textarea {
 
           <div class="tile">
             <input
-              type="radio"
+              type="checkbox"
               name="line"
               id="l6"
               value="6호선"
@@ -695,11 +947,11 @@ textarea {
       </div>
 
       <p class="msg">
-        이용한 지하철 노선을 하나 선택해 주세요.
+        이용한 지하철 노선을 하나 이상 선택해 주세요.
       </p>
     </section>
 
-    <!-- Q3 기억에 남는 경험 : 서술형 -->
+    <!-- Q3 기억에 남는 경험 : 객관식 + 기타(직접 입력) -->
 
     <section class="q q3" data-q="3">
       <div class="q-head">
@@ -711,17 +963,67 @@ textarea {
       </div>
 
       <div class="q-body">
-        <textarea
-          id="memo"
-          maxlength="200"
-          placeholder="예) 남산에서 본 노을이 가장 기억에 남아요."
+        <p class="hint">여러 개 선택할 수 있어요.</p>
+        <div
+          class="choices"
+          role="group"
           aria-label="가장 기억에 남는 경험"
-        ></textarea>
+        >
 
-        <div class="count">
-          <span id="cnt">0</span> / 200
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x1" value="Visiting famous landmarks">
+            <label for="x1"><em>1</em><span>Visiting famous landmarks <small>(유명 관광지 방문)</small></span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x2" value="Trying Korean food">
+            <label for="x2"><em>2</em><span>Trying Korean food <small>(한국 음식 체험)</small></span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x3" value="Shopping in Seoul">
+            <label for="x3"><em>3</em><span>Shopping in Seoul <small>(서울에서 쇼핑)</small></span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x4" value="Exploring Korean culture">
+            <label for="x4"><em>4</em><span>Exploring Korean culture <small>(한국 문화 체험)</small></span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x5" value="Enjoying the city views">
+            <label for="x5"><em>5</em><span>Enjoying the city views <small>(서울의 풍경 감상)</small></span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x6" value="Meeting new people">
+            <label for="x6"><em>6</em><span>Meeting new people <small>(새로운 사람들과의 만남)</small></span></label>
+          </div>
+
+          <div class="choice">
+            <input type="checkbox" name="memory" id="x7" value="기타">
+            <label for="x7"><em>7</em><span>기타</span></label>
+          </div>
+
+        </div>
+
+        <!-- 기타 선택 시에만 표시 -->
+
+        <div class="etc-wrap" id="etcWrap3" hidden>
+          <textarea
+            id="memoryEtc"
+            name="memoryEtc"
+            class="place-input"
+            maxlength="100"
+            placeholder="기억에 남는 경험을 직접 입력해 주세요."
+            aria-label="기타 기억에 남는 경험"
+          ></textarea>
         </div>
       </div>
+
+      <p class="msg" id="msg3">
+        기억에 남는 경험을 하나 이상 선택해 주세요.
+      </p>
     </section>
 
     <!-- Q4 여행 중 느낀 감정 -->
@@ -736,15 +1038,16 @@ textarea {
       </div>
 
       <div class="q-body">
+        <p class="hint">여러 개 선택할 수 있어요.</p>
         <div
           class="moods"
-          role="radiogroup"
+          role="group"
           aria-label="여행 중 느낀 감정"
         >
 
           <div class="mood">
             <input
-              type="radio"
+              type="checkbox"
               name="mood"
               id="m1"
               value="신나요"
@@ -756,7 +1059,7 @@ textarea {
 
           <div class="mood">
             <input
-              type="radio"
+              type="checkbox"
               name="mood"
               id="m2"
               value="행복해요"
@@ -768,7 +1071,7 @@ textarea {
 
           <div class="mood">
             <input
-              type="radio"
+              type="checkbox"
               name="mood"
               id="m3"
               value="감동이에요"
@@ -780,7 +1083,7 @@ textarea {
 
           <div class="mood">
             <input
-              type="radio"
+              type="checkbox"
               name="mood"
               id="m4"
               value="편안해요"
@@ -792,7 +1095,7 @@ textarea {
 
           <div class="mood">
             <input
-              type="radio"
+              type="checkbox"
               name="mood"
               id="m5"
               value="아쉬워요"
@@ -802,19 +1105,36 @@ textarea {
             </label>
           </div>
 
+          <div class="mood">
+            <input
+              type="checkbox"
+              name="mood"
+              id="m6"
+              value="화나요"
+            >
+            <label for="m6">
+              <b>😡</b>화나요
+            </label>
+          </div>
+
         </div>
       </div>
 
       <p class="msg">
-        느낀 감정을 하나 선택해 주세요.
+        느낀 감정을 하나 이상 선택해 주세요.
       </p>
     </section>
 
-    <!-- 제출 버튼 -->
+    <!-- 이전 / 다음 / 제출 버튼 -->
 
-    <button type="submit" class="submit">
-      설문 제출하고 교환권 받기
-    </button>
+    <div class="nav">
+      <button type="button" class="prev" id="prev" hidden>
+        ← 이전
+      </button>
+      <button type="submit" class="submit" id="next">
+        다음 →
+      </button>
+    </div>
 
   </form>
 
@@ -877,138 +1197,195 @@ textarea {
 <script>
 (function() {
 
-  const form = document.getElementById('survey');
-  const place = document.getElementById('place');
-  const memo = document.getElementById('memo');
+  const form  = document.getElementById('survey');
+  const qs    = Array.from(form.querySelectorAll('.q'));
+  const dots  = Array.from(document.querySelectorAll('#qprog i'));
+  const count = document.getElementById('qcount');
+  const prev  = document.getElementById('prev');
+  const next  = document.getElementById('next');
+  const steps = document.getElementById('steps');
 
-  // 글자 수 표시
+  let cur = 0;
 
-  memo.addEventListener('input', function() {
-    document.getElementById('cnt').textContent =
-      memo.value.length;
+  // 기타 입력칸이 있는 질문 설정
+
+  const etcCfg = {
+    place:  { wrap:'etcWrap1', ta:'placeEtc',  msg:'msg1',
+              none:'방문한 장소를 하나 이상 선택해 주세요.',
+              empty:'기타 장소를 직접 입력해 주세요.' },
+    memory: { wrap:'etcWrap3', ta:'memoryEtc', msg:'msg3',
+              none:'기억에 남는 경험을 하나 이상 선택해 주세요.',
+              empty:'기타 경험을 직접 입력해 주세요.' }
+  };
+
+  function checked(name) {
+    return Array.from(form.querySelectorAll('[name="' + name + '"]:checked'));
+  }
+
+  // 복수 선택 + (기타 선택 시) 직접 입력 검사
+
+  function checkChoice(name) {
+    const c = etcCfg[name];
+    const sel = checked(name);
+
+    if (sel.length === 0) {
+      if (c) document.getElementById(c.msg).textContent = c.none;
+      return false;
+    }
+
+    if (c && sel.some(function(r) { return r.value === '기타'; }) &&
+        document.getElementById(c.ta).value.trim().length === 0) {
+      document.getElementById(c.msg).textContent = c.empty;
+      return false;
+    }
+
+    return true;
+  }
+
+  const valid = [
+    function() { return checkChoice('place');  },
+    function() { return checkChoice('line');   },
+    function() { return checkChoice('memory'); },
+    function() { return checkChoice('mood');   }
+  ];
+
+  // 기타 체크 시에만 입력칸 표시
+
+  Object.keys(etcCfg).forEach(function(name) {
+    const c = etcCfg[name];
+    const wrap = document.getElementById(c.wrap);
+    const ta = document.getElementById(c.ta);
+
+    form.querySelectorAll('[name="' + name + '"]').forEach(function(box) {
+      if (box.value !== '기타') return;
+
+      box.addEventListener('change', function() {
+        wrap.hidden = !box.checked;
+        if (box.checked) ta.focus();
+      });
+    });
   });
 
   // 입력 또는 선택 시 오류 표시 해제
 
-  form.addEventListener('input', function(e) {
-    const q = e.target.closest('.q');
+  ['input','change'].forEach(function(ev) {
+    form.addEventListener(ev, function(e) {
+      const q = e.target.closest('.q');
+      if (q) q.classList.remove('err');
+    });
+  });
 
-    if (q) {
-      q.classList.remove('err');
+  // 질문 전환
+
+  function show(i, goingBack) {
+
+    cur = i;
+
+    qs.forEach(function(q, idx) {
+      q.classList.remove('active', 'back');
+      if (idx === i) {
+        q.classList.add('active');
+        if (goingBack) q.classList.add('back');
+      }
+    });
+
+    dots.forEach(function(d, idx) {
+      d.classList.toggle('on', idx <= i);
+    });
+
+    count.textContent = (i + 1) + ' / ' + qs.length;
+
+    prev.hidden = (i === 0);
+
+    next.textContent = (i === qs.length - 1)
+      ? '설문 제출하고 교환권 받기'
+      : '다음 →';
+  }
+
+  function scrollTop() {
+    window.scrollTo({
+      top:steps.offsetTop - 12,
+      behavior:'smooth'
+    });
+  }
+
+  prev.addEventListener('click', function() {
+    if (cur > 0) {
+      show(cur - 1, true);
+      scrollTop();
     }
   });
 
-  form.addEventListener('change', function(e) {
-    const q = e.target.closest('.q');
-
-    if (q) {
-      q.classList.remove('err');
-    }
-  });
-
-  // 설문 제출
+  // 다음 / 제출 (Enter 키도 동일하게 동작)
 
   form.addEventListener('submit', function(e) {
 
     e.preventDefault();
 
-    const checks = [
-      ['1', place.value.trim().length > 0],
-      ['2', !!form.querySelector('[name="line"]:checked')],
-      ['4', !!form.querySelector('[name="mood"]:checked')]
-    ];
-
-    let firstBad = null;
-
-    checks.forEach(function(c) {
-
-      const q = form.querySelector(
-        '[data-q="' + c[0] + '"]'
-      );
-
-      q.classList.toggle('err', !c[1]);
-
-      if (!c[1] && !firstBad) {
-        firstBad = q;
-      }
-
-    });
-
-    if (firstBad) {
-
-      firstBad.scrollIntoView({
-        behavior:'smooth',
-        block:'center'
-      });
-
+    if (!valid[cur]()) {
+      qs[cur].classList.add('err');
       return;
     }
 
-    // 교환권 번호 생성
+    if (cur < qs.length - 1) {
+      show(cur + 1, false);
+      scrollTop();
+      return;
+    }
 
-    const n = Math.floor(
-      1000 + Math.random() * 9000
-    );
+    finish();
+  });
+
+  // 설문 완료 → 교환권
+
+  function finish() {
+
+    const n = Math.floor(1000 + Math.random() * 9000);
 
     const s = Math.random()
       .toString(36)
       .slice(2,5)
       .toUpperCase();
 
-    document.getElementById('code').textContent =
-      'SEOUL-' + n + s;
-
-    // 설문 숨기기 및 교환권 표시
+    document.getElementById('code').textContent = 'SEOUL-' + n + s;
 
     form.style.display = 'none';
 
-    document.getElementById('done').style.display =
-      'block';
+    document.getElementById('done').style.display = 'block';
 
-    document.getElementById('s2').className =
-      'done';
+    document.getElementById('s2').className = 'done';
+    document.getElementById('s3').className = 'on';
 
-    document.getElementById('s3').className =
-      'on';
-
-    window.scrollTo({
-      top:document.getElementById('steps').offsetTop - 12,
-      behavior:'smooth'
-    });
-
-  });
+    scrollTop();
+  }
 
   // 설문 다시 하기
 
-  document.getElementById('again')
-    .addEventListener('click', function() {
+  document.getElementById('again').addEventListener('click', function() {
 
-      form.reset();
+    form.reset();
 
-      document.getElementById('cnt').textContent =
-        '0';
-
-      form.querySelectorAll('.q').forEach(function(q) {
-        q.classList.remove('err');
-      });
-
-      form.style.display = '';
-
-      document.getElementById('done').style.display =
-        'none';
-
-      document.getElementById('s2').className =
-        'on';
-
-      document.getElementById('s3').className =
-        '';
-
-      window.scrollTo({
-        top:0,
-        behavior:'smooth'
-      });
-
+    Object.keys(etcCfg).forEach(function(name) {
+      document.getElementById(etcCfg[name].wrap).hidden = true;
     });
+
+    qs.forEach(function(q) {
+      q.classList.remove('err');
+    });
+
+    form.style.display = '';
+
+    document.getElementById('done').style.display = 'none';
+
+    document.getElementById('s2').className = 'on';
+    document.getElementById('s3').className = '';
+
+    show(0, false);
+
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+
+  show(0, false);
 
 })();
 </script>
